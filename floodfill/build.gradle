@@ -10,7 +10,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -71,7 +71,7 @@ ext {
     siteUrl = 'https://github.com/Dhaval2404/AndroidFloodFill'
     gitUrl = 'https://github.com/Dhaval2404/AndroidFloodFill.git'
 
-    libraryVersion = '1.0'
+    libraryVersion = '0.1'
     //If you are uploading new library try : gradlew install
     //If you are updating existing library then execute: gradlew bintrayUpload
     //In both the case don't forgot to put bintray credentials in local.properties file.
