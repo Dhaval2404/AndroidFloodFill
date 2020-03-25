@@ -2,6 +2,11 @@ package com.github.dhaval2404.floodfill.sample.model
 
 import java.io.Serializable
 
+/**
+ * @author Dhaval Patel
+ * @version 1.0
+ * @since 12 Nov 2019
+ */
 data class DrawMove(
     val color: Int,
     val points: FloatArray

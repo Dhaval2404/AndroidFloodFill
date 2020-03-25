@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="image"
+            type="com.github.dhaval2404.floodfill.sample.model.Image" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/imageLyt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_height="210dp"
+            android:layout_margin="6dp"
+            android:orientation="vertical"
+            android:tag="@{image}"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="true"
+            tools:background="@color/grey_900">
+
+            <com.github.dhaval2404.floodfill.sample.util.SquareImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:loadImage="@{image.url}"
+                />
+
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</layout>

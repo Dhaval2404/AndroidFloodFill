@@ -1,0 +1,50 @@
+{
+  "albums": [
+    {
+      "title": "Animal",
+      "images": [
+        {
+          "url": "file:///android_asset/animal/animal_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_2.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_3.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_4.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_5.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_6.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_7.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_8.jpg",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    },
+    {
+      "title": "Bird",
+      "images": [
+        {
+          "url": "file:///android_asset/bird/bird_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    }
+  ]
+}

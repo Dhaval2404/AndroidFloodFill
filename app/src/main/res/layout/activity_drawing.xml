@@ -11,21 +11,77 @@
         android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
-    <View
+    <LinearLayout
         android:id="@+id/drawingActionLyt"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:layout_constraintBottom_toTopOf="@id/colorPaletteLyt"
-        android:background="@color/grey_850" />
+        android:layout_height="wrap_content"
+        android:background="@color/grey_850"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-    <View
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/undoImg"
+            style="@style/AppIconStyle"
+            android:onClick="undo"
+            android:alpha="0.3"
+            app:srcCompat="@drawable/round_fast_rewind_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/redoImg"
+            style="@style/AppIconStyle"
+            android:onClick="redo"
+            android:alpha="0.3"
+            app:srcCompat="@drawable/round_fast_forward_24" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/AppIconStyle"
+            android:onClick="reset"
+            app:srcCompat="@drawable/round_replay_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            style="@style/AppIconStyle"
+            android:onClick="save"
+            app:srcCompat="@drawable/round_check_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/colorPaletteLyt"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/grey_900" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="@color/grey_900" >
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/colorPaletteRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:itemCount="16"
+            tools:listitem="@layout/adapter_color_palette"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/colorShadeRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center"
+            tools:itemCount="10"
+            tools:listitem="@layout/adapter_color_shade"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
 
 </LinearLayout>

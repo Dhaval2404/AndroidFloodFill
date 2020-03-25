@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="shade"
+            type="Integer" />
+
+        <variable
+            name="isChecked"
+            type="Boolean" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:background="@color/grey_900">
+
+        <View
+            android:id="@+id/colorShade"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@{shade}"
+            android:minWidth="36dp"
+            android:tag="@{shade}"
+            tools:background="@color/amber_400" />
+
+        <View
+            android:id="@+id/colorShadeStroke"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:background="@drawable/color_shade_stroke"
+            android:visibility="@{isChecked? View.VISIBLE : View.GONE, default=gone}"
+            android:minWidth="36dp" />
+
+    </FrameLayout>
+
+</layout>

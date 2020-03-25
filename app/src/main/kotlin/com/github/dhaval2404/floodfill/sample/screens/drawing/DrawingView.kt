@@ -5,12 +5,20 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
 import android.os.Build
+import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import com.github.dhaval2404.floodfill.sample.model.DrawMove
+import androidx.lifecycle.MutableLiveData
+import com.github.dhaval2404.floodfill.FloodFill
+import com.github.dhaval2404.floodfill.sample.util.BitmapUtil
 
+/**
+ * @author Dhaval Patel
+ * @version 1.0
+ * @since 11 Dec 2019
+ */
 class DrawingView : View {
 
     @JvmOverloads
@@ -29,19 +37,26 @@ class DrawingView : View {
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     private lateinit var mBitmap: Bitmap
-    private lateinit var mCanvas: Canvas
 
     private var mImageBitmap: Bitmap? = null
     private var mImagePaint = Paint(Paint.DITHER_FLAG)
     private var mImageBitmapMatrix: Matrix? = null
 
-    private var mDrawingIndex = 0
-    private val mDrawingHistory: MutableList<DrawMove> = ArrayList()
-    private var mDrawColor: Int = Color.BLUE
+    private var mDrawColor: Int = Color.parseColor("#5c6bc0")
+
+    private val mDrawingViewChangeLiveData: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
+
+    init {
+        DrawingHistory.setDrawingChangeListener {
+            invalidate()
+            mDrawingViewChangeLiveData.postValue(DrawingHistory.getIndex())
+        }
+    }
 
     private val mPaint: Paint = Paint().apply {
         style = Paint.Style.FILL
-        color = mDrawColor
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -51,8 +66,8 @@ class DrawingView : View {
 
     private fun init(w: Int, h: Int) {
         if (w <= 0 || h <= 0) {
-           Log.w("TAG", "w=0, h=0")
-           return
+            Log.w("TAG", "w=0, h=0")
+            return
         }
 
         mImageBitmap?.let {
@@ -70,47 +85,54 @@ class DrawingView : View {
         }
 
         mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-        mCanvas = Canvas(mBitmap)
-        mCanvas.drawColor(Color.TRANSPARENT)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        if(!::mBitmap.isInitialized){
-            return
-        }
-
         if (mImageBitmap != null) {
             canvas.drawBitmap(mImageBitmap!!, mImageBitmapMatrix!!, mImagePaint)
         }
 
-        canvas.drawBitmap(mBitmap, 0f, 0f, null)
-
-        for (i in 0 until mDrawingIndex) {
-            val drawMove = mDrawingHistory[i]
+        for (i in 0 until DrawingHistory.getIndex()) {
+            val drawMove = DrawingHistory.getHistory()[i]
             mPaint.color = drawMove.color
             canvas.drawPoints(drawMove.points, mPaint)
         }
     }
 
+    private var mFloodFillRunning = false
     private fun touchUp(x: Float, y: Float) {
+        if (mFloodFillRunning) return
+
+        mFloodFillRunning = true
         val bitmap = overlay(mImageBitmap!!, mBitmap)
-        /*FloodFill.Builder(bitmap)
+
+        val pixel = bitmap.getPixel(x.toInt(), y.toInt())
+        if(BitmapUtil.isEqualColor(pixel, Color.BLACK)){
+            Log.w("FloodFill", "Ignore black color")
+            mFloodFillRunning = false
+            return
+        }
+
+        Log.w("FloodFill", "Start")
+        FloodFill.Builder(bitmap)
             .point(x, y)
             .newColor(mDrawColor)
             .build()
             .getPixels(Handler(Handler.Callback {
+                Log.w("FloodFill", "Finish")
                 val points = it.obj as FloatArray
                 add(points)
+                mFloodFillRunning = false
                 true
-            }))*/
+            }))
     }
 
     private fun overlay(background: Bitmap, foreground: Bitmap): Bitmap {
-        val combinedBitmap =
-            Bitmap.createBitmap(foreground.width, foreground.height, foreground.config)
+        val combinedBitmap = Bitmap.createBitmap(foreground.width, foreground.height, foreground.config)
         val canvas = Canvas(combinedBitmap)
+        canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(background, mImageBitmapMatrix!!, mImagePaint)
         canvas.drawBitmap(foreground, 0f, 0f, mImagePaint)
         return combinedBitmap
@@ -125,37 +147,34 @@ class DrawingView : View {
         return true
     }
 
-    private fun add(points: FloatArray) {
-        if (points.isEmpty()) return
+    /****** Getter/Setter Methods Starts ******/
 
-        if (mDrawingHistory.size > mDrawingIndex) {
-            mDrawingHistory.subList(mDrawingIndex, mDrawingHistory.size).clear()
-        }
-
-        mDrawingHistory.add(DrawMove(mDrawColor, points))
-        mDrawingIndex++
-
-        invalidate()
-    }
-
-    fun undo() {
-        if (mDrawingIndex > 0) {
-            mDrawingIndex--
-            invalidate()
-        }
-    }
-
-    fun redo() {
-        if (mDrawingIndex < mDrawingHistory.size) {
-            mDrawingIndex++
-            invalidate()
-        }
-    }
+    fun getDrawingViewChangeLiveData() = mDrawingViewChangeLiveData
 
     fun setBackgroundImage(bitmap: Bitmap) {
         this.mImageBitmap = bitmap
         init(width, height)
         invalidate()
+    }
+
+    fun setColor(color: Int) {
+        this.mDrawColor = color
+    }
+
+    /****** Action Methods Starts ******/
+
+    private fun add(points: FloatArray) {
+        DrawingHistory.add(mDrawColor, points)
+    }
+
+    fun getBitmap(): Bitmap {
+        val view = this
+
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.layout(view.left, view.top, view.right, view.bottom)
+        view.draw(canvas)
+        return bitmap
     }
 
 }

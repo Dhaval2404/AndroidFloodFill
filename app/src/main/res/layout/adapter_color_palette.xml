@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="color"
+            type="com.github.dhaval2404.floodfill.sample.model.AppColor" />
+
+        <variable
+            name="isChecked"
+            type="Boolean" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        tools:background="@color/grey_900"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/colorPalette"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:tag="@{color}"
+            tools:backgroundTint="@color/red_500"
+            android:backgroundTint="@{color.paletteColor}"
+            android:background="@drawable/color_palette_bg" />
+
+        <View
+            android:id="@+id/colorPaletteStroke"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:visibility="@{isChecked? View.VISIBLE : View.GONE, default=gone}"
+            android:background="@drawable/color_palette_stroke" />
+
+    </FrameLayout>
+</layout>
