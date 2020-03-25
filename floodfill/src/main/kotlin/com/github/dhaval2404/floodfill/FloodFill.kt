@@ -1,7 +1,9 @@
 package com.github.dhaval2404.floodfill
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Point
 import android.os.Handler
 
@@ -38,7 +40,7 @@ class FloodFill private constructor(
         /**
          * Tolerance for the flood-fill algorithms
          */
-        var tolerance: Int = 150 // Optional
+        var tolerance: Int = 100 // Optional
     ) {
 
         fun point(x: Float, y: Float) = apply { this.point = Point(x.toInt(), y.toInt()) }
@@ -56,6 +58,7 @@ class FloodFill private constructor(
 
     companion object {
         init {
+            // Load floodfill native shared library
             System.loadLibrary("floodfill")
         }
     }
@@ -83,17 +86,26 @@ class FloodFill private constructor(
     fun getPixels(handler: Handler) {
         Thread(Runnable {
             val pixels = getPixels()
-            publishResult(handler, pixels)
+            handler.obtainMessage().apply {
+                obj = pixels
+            }.also {
+                handler.sendMessage(it)
+            }
         }).start()
     }
 
-    private fun publishResult(handler: Handler, result: Any) {
-        handler.obtainMessage().apply {
-            what = 0
-            arg1 = 1
-            obj = result
-        }.also {
-            handler.sendMessage(it)
-        }
+    fun fill(handler: Handler) {
+        Thread(Runnable {
+            val pixels = getPixels()
+            val canvas1 = Canvas(canvas)
+            canvas1.drawPoints(pixels, Paint().apply {
+                color = newColor
+            })
+            handler.obtainMessage().apply {
+                obj = canvas
+            }.also {
+                handler.sendMessage(it)
+            }
+        }).start()
     }
 }
