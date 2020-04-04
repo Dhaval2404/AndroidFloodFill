@@ -6,7 +6,7 @@ apply from: "../ktlint.gradle"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.github.dhaval2404.floodfill.sample"
@@ -60,8 +60,8 @@ dependencies {
     implementation 'gun0912.ted:tedpermission:2.2.3'
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    def koin_version = '2.1.4'
-    implementation "org.koin:koin-core:$koin_version"
+    def koin_version = '2.1.5'
+    implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-viewmodel:$koin_version"
 
     testImplementation 'junit:junit:4.13'
