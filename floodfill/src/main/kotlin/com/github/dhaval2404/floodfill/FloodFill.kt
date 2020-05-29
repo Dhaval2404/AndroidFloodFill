@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
 import android.os.Handler
+import android.util.Log
 
 /**
  * @author Dhaval Patel
@@ -13,11 +14,11 @@ import android.os.Handler
  * @since 11 Dec 2019
  */
 class FloodFill private constructor(
-    val canvas: Bitmap,
-    val point: Point,
-    val targetColor: Int,
-    val tolerance: Int,
-    val newColor: Int
+    private val canvas: Bitmap,
+    private val point: Point,
+    private val targetColor: Int,
+    private val tolerance: Int,
+    private val newColor: Int
 ) {
 
     data class Builder(
@@ -61,6 +62,13 @@ class FloodFill private constructor(
             // Load floodfill native shared library
             System.loadLibrary("floodfill")
         }
+
+        /**
+         * Dummy method for init block invocation
+         */
+        fun init(){
+        }
+
     }
 
     private external fun floodFill(

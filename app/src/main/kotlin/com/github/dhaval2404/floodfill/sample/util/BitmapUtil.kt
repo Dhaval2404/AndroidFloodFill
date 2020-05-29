@@ -1,14 +1,13 @@
 package com.github.dhaval2404.floodfill.sample.util
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.RectF
 import android.os.Environment
+import android.view.View
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
 
 /**
  * @author Dhaval Patel
@@ -17,34 +16,21 @@ import java.io.InputStream
  */
 object BitmapUtil {
 
-    fun getBitmapFromAsset(context: Context, filePath: String): Bitmap? {
-        val assetManager = context.assets
-
-        val ip: InputStream
-        var bitmap: Bitmap? = null
-        try {
-            ip = assetManager.open(filePath)
-            bitmap = BitmapFactory.decodeStream(ip)
-        } catch (e: IOException) {
-            // handle exception
-            e.printStackTrace()
-        }
-
-        return bitmap
-    }
-
-    fun resize(bitmap: Bitmap, dstWidth: Int, dstHeight: Int): Bitmap {
-        return Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, false)
-    }
-
-    fun saveBitmap(finalBitmap: Bitmap): File? {
+    fun saveBitmap(bitmap: Bitmap): File? {
         val root: String = Environment.getExternalStorageDirectory().absolutePath
+        return saveBitmap(bitmap, root)
+    }
+
+    fun saveBitmap(bitmap: Bitmap, root: String): File? {
+        val rootFile = File(root)
+        if (!rootFile.exists()) rootFile.mkdirs()
+
         val fname = "Image_" + System.currentTimeMillis() + ".png"
         val file = File(root, fname)
         if (file.exists()) file.delete()
         try {
             val out = FileOutputStream(file)
-            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.flush()
             out.close()
 
@@ -55,25 +41,26 @@ object BitmapUtil {
         return null
     }
 
-    fun isEqualColor(color1: Int, color2: Int, tolerance: Int = 50): Boolean {
-        val alpha1 = Color.alpha(color1)
-        val red1 = Color.red(color1)
-        val green1 = Color.green(color1)
-        val blue1 = Color.blue(color1)
+    fun getBitmapMatrix(bitmap: Bitmap, width: Float, height: Float): Matrix {
+        val src = RectF(
+            0f, 0f,
+            bitmap.width.toFloat(),
+            bitmap.height.toFloat()
+        )
 
-        val alpha2 = Color.alpha(color2)
-        val red2 = Color.red(color2)
-        val green2 = Color.green(color2)
-        val blue2 = Color.blue(color2)
+        val dst = RectF(0f, 0f, width, height)
 
-        return (alpha1 >= (alpha2 - tolerance) &&
-                alpha1 <= (alpha2 + tolerance) &&
-                red1 >= (red2 - tolerance) &&
-                red1 <= (red2 + tolerance) &&
-                green1 >= (green2 - tolerance) &&
-                green1 <= (green2 + tolerance) &&
-                blue1 >= (blue2 - tolerance) &&
-                blue1 <= (blue2 + tolerance))
+        return Matrix().apply {
+            setRectToRect(src, dst, Matrix.ScaleToFit.CENTER)
+        }
+    }
+
+    fun getBitmap(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.layout(view.left, view.top, view.right, view.bottom)
+        view.draw(canvas)
+        return bitmap
     }
 
 }

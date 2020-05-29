@@ -1,6 +1,7 @@
-package com.github.dhaval2404.floodfill.sample.model
+package com.github.dhaval2404.floodfill.sample.data.model
 
 import android.os.Parcelable
+import com.github.dhaval2404.floodfill.sample.data.entity.Image
 import kotlinx.android.parcel.Parcelize
 
 data class AlbumImages(
@@ -9,12 +10,7 @@ data class AlbumImages(
 
 @Parcelize
 data class Album(
+    val id:Long,
     val title: String,
     val images: List<Image>
-) : Parcelable
-
-@Parcelize
-data class Image(
-    val url: String,
-    val copyright: String
 ) : Parcelable

@@ -7,34 +7,35 @@
 
         <variable
             name="image"
-            type="com.github.dhaval2404.floodfill.sample.model.Image" />
+            type="com.github.dhaval2404.floodfill.sample.data.entity.Image" />
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageLyt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:layout_height="210dp"
+            android:layout_height="0dp"
             android:layout_margin="6dp"
             android:orientation="vertical"
             android:tag="@{image}"
             app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true"
             app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintDimensionRatio="1:1.15"
+            app:layout_constraintTop_toTopOf="parent"
             tools:background="@color/grey_900">
 
-            <com.github.dhaval2404.floodfill.sample.util.SquareImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:loadImage="@{image.url}"
-                />
+                android:scaleType="centerCrop"
+                app:loadImage="@{image}" />
 
         </com.google.android.material.card.MaterialCardView>
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

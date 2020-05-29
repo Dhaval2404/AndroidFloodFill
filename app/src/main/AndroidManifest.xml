@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".screens.image_category.MainActivity"
+            android:name=".screens.album_picker.AlbumPickerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -33,7 +33,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".screens.drawing.DrawingActivity"
+            android:name=".screens.drawing_view.DrawingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>

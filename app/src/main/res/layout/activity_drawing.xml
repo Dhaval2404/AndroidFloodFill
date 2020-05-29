@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".screens.drawing.DrawingActivity">
+    tools:context=".screens.drawing_view.DrawingActivity">
 
-    <com.github.dhaval2404.floodfill.sample.screens.drawing.DrawingView
+    <com.github.dhaval2404.floodfill.sample.screens.drawing_view.DrawingView
         android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

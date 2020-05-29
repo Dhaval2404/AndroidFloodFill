@@ -1,12 +1,20 @@
 package com.github.dhaval2404.floodfill.sample.screens.image_picker
 
 import android.content.Context
-import android.content.Intent
-import androidx.lifecycle.ViewModel
-import com.github.dhaval2404.floodfill.sample.model.Image
-import com.github.dhaval2404.floodfill.sample.screens.drawing.DrawingActivity
-import org.koin.core.KoinComponent
+import android.os.Bundle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
+import com.github.dhaval2404.floodfill.sample.data.dao.ImageDAO
+import com.github.dhaval2404.floodfill.sample.data.entity.Image
+import com.github.dhaval2404.floodfill.sample.data.model.Album
+import com.github.dhaval2404.floodfill.sample.screens.base.BaseViewModel
+import com.github.dhaval2404.floodfill.sample.screens.drawing_view.DrawingActivity
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.launch
 import org.koin.core.inject
+import java.util.stream.Collectors
 
 /**
  * TODO: Add Class Header
@@ -15,24 +23,38 @@ import org.koin.core.inject
  * @version 1.0
  * @since 27 Dec 2019
  */
-class ImagePickerViewModel() :ViewModel(), KoinComponent{
+class ImagePickerViewModel() : BaseViewModel<ImagePickerNavigator>() {
 
-    private var mNavigator: ImagePickerNavigator? = null
-    private val mContext:Context by inject()
+    private val mContext: Context by inject()
+    private val mImageDAO: ImageDAO by inject()
 
-    private val mImagePickerAdapter: ImagePickerAdapter by lazy {
-        ImagePickerAdapter(this)
+    private val mImagePickerAdapter = ImagePickerAdapter()
+    private var mAlbum: Album? = null
+
+    init {
+        mImagePickerAdapter.setImageClickListener(::onImagePick)
     }
 
-    fun setNavigator(navigator: ImagePickerNavigator) {
-        this.mNavigator = navigator
+    fun setBundle(bundle: Bundle?) {
+        mAlbum = bundle?.getParcelable(ImagePickerActivity.EXTRA_ALBUM)
+        setImages()
     }
 
     fun getAdapter() = mImagePickerAdapter
 
-    fun onImagePick(image: Image) {
-        val intent = Intent(mContext, DrawingActivity::class.java)
-        intent.putExtra("path", image.url)
+    fun getTitle() = mAlbum?.title
+
+    fun setImages() {
+        viewModelScope.launch {
+            val imageList = mImageDAO.getByAlbumId(mAlbum?.id ?: 0)
+            imageList.collect {
+                mImagePickerAdapter.refresh(it)
+            }
+        }
+    }
+
+    private fun onImagePick(image: Image) {
+        val intent = DrawingActivity.getIntent(mContext, image)
         mNavigator?.startActivity(intent)
     }
 

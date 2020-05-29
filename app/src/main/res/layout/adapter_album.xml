@@ -7,35 +7,35 @@
 
         <variable
             name="album"
-            type="com.github.dhaval2404.floodfill.sample.model.Album" />
+            type="com.github.dhaval2404.floodfill.sample.data.model.Album" />
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="6dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageLyt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="6dp"
             android:orientation="vertical"
             android:tag="@{album}"
             app:cardCornerRadius="10dp"
-            app:contentPadding="12dp"
             app:cardPreventCornerOverlap="true"
-            tools:background="@color/grey_900"
-            tools:layout_height="210dp">
+            app:layout_constraintDimensionRatio="1:1.15"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@color/grey_900">
 
-            <com.github.dhaval2404.floodfill.sample.util.SquareImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:loadImage="@{album.images.get(0).url}"
-                />
+                android:scaleType="centerCrop"
+                app:loadImage="@{album}" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -48,8 +48,11 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_800"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageLyt"
             tools:text="Category" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

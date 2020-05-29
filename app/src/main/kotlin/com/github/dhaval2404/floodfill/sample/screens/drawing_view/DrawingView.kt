@@ -1,18 +1,29 @@
-package com.github.dhaval2404.floodfill.sample.screens.drawing
+package com.github.dhaval2404.floodfill.sample.screens.drawing_view
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
 import android.os.Build
-import android.os.Handler
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import com.github.dhaval2404.floodfill.FloodFill
 import com.github.dhaval2404.floodfill.sample.util.BitmapUtil
+import com.github.dhaval2404.floodfill.sample.util.ColorUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Dhaval Patel
@@ -44,14 +55,14 @@ class DrawingView : View {
 
     private var mDrawColor: Int = Color.parseColor("#5c6bc0")
 
-    private val mDrawingViewChangeLiveData: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
-    }
+    // Mutex
+    private val mutex = Mutex()
 
     init {
-        DrawingHistory.setDrawingChangeListener {
+        FloodFill.init()
+
+        DrawingHistory.addDrawingChangeListener {
             invalidate()
-            mDrawingViewChangeLiveData.postValue(DrawingHistory.getIndex())
         }
     }
 
@@ -71,17 +82,7 @@ class DrawingView : View {
         }
 
         mImageBitmap?.let {
-            val src = RectF(
-                0f, 0f,
-                it.width.toFloat(),
-                it.height.toFloat()
-            )
-
-            val dst = RectF(0f, 0f, w.toFloat(), h.toFloat())
-
-            mImageBitmapMatrix = Matrix().apply {
-                setRectToRect(src, dst, Matrix.ScaleToFit.CENTER)
-            }
+            mImageBitmapMatrix = BitmapUtil.getBitmapMatrix(it, w.toFloat(), h.toFloat())
         }
 
         mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
@@ -101,36 +102,50 @@ class DrawingView : View {
         }
     }
 
-    private var mFloodFillRunning = false
     private fun touchUp(x: Float, y: Float) {
-        if (mFloodFillRunning) return
+        Log.w("FloodFill", "Start")
+        CoroutineScope(Dispatchers.Main).launch {
+            val points: FloatArray? = withTimeoutOrNull(TimeUnit.SECONDS.toMillis(10)) {
+                applyFloodFill(x, y)
+            }
+            if (points != null && points.isNotEmpty()) {
+                Log.w("FloodFill", "Finish")
+                DrawingHistory.add(mDrawColor, points)
+                invalidate()
+            }
+        }
+    }
 
-        mFloodFillRunning = true
+    private suspend fun applyFloodFill(x: Float, y: Float): FloatArray? {
         val bitmap = overlay(mImageBitmap!!, mBitmap)
 
         val pixel = bitmap.getPixel(x.toInt(), y.toInt())
-        if(BitmapUtil.isEqualColor(pixel, Color.BLACK)){
+        if (ColorUtil.isEqualColor(pixel, Color.BLACK)) {
             Log.w("FloodFill", "Ignore black color")
-            mFloodFillRunning = false
-            return
+            return null
         }
 
-        Log.w("FloodFill", "Start")
-        FloodFill.Builder(bitmap)
+        val floodFill = FloodFill.Builder(bitmap)
             .point(x, y)
             .newColor(mDrawColor)
             .build()
-            .getPixels(Handler(Handler.Callback {
-                Log.w("FloodFill", "Finish")
-                val points = it.obj as FloatArray
-                add(points)
-                mFloodFillRunning = false
-                true
-            }))
+
+        val points = withContext(Dispatchers.IO) {
+            // Synchronization Alternative
+            mutex.withLock {
+                floodFill.getPixels()
+            }
+        }
+
+        // Release Memory
+        bitmap.recycle()
+
+        return points
     }
 
     private fun overlay(background: Bitmap, foreground: Bitmap): Bitmap {
-        val combinedBitmap = Bitmap.createBitmap(foreground.width, foreground.height, foreground.config)
+        val combinedBitmap =
+            Bitmap.createBitmap(foreground.width, foreground.height, foreground.config)
         val canvas = Canvas(combinedBitmap)
         canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(background, mImageBitmapMatrix!!, mImagePaint)
@@ -140,16 +155,13 @@ class DrawingView : View {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_UP) {
+        if (event.action == MotionEvent.ACTION_DOWN) {
             touchUp(event.x, event.y)
-            invalidate()
         }
         return true
     }
 
     /****** Getter/Setter Methods Starts ******/
-
-    fun getDrawingViewChangeLiveData() = mDrawingViewChangeLiveData
 
     fun setBackgroundImage(bitmap: Bitmap) {
         this.mImageBitmap = bitmap
@@ -161,20 +173,6 @@ class DrawingView : View {
         this.mDrawColor = color
     }
 
-    /****** Action Methods Starts ******/
-
-    private fun add(points: FloatArray) {
-        DrawingHistory.add(mDrawColor, points)
-    }
-
-    fun getBitmap(): Bitmap {
-        val view = this
-
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        view.layout(view.left, view.top, view.right, view.bottom)
-        view.draw(canvas)
-        return bitmap
-    }
+    fun getBitmap() = BitmapUtil.getBitmap(this)
 
 }

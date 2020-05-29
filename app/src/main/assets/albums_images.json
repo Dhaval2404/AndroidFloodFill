@@ -1,7 +1,8 @@
 {
   "albums": [
     {
-      "title": "Animal",
+      "id" : 1,
+      "title": "Animals",
       "images": [
         {
           "url": "file:///android_asset/animal/animal_1.png",
@@ -38,7 +39,58 @@
       ]
     },
     {
-      "title": "Bird",
+      "id": 2,
+      "title": "Birds",
+      "images": [
+        {
+          "url": "file:///android_asset/bird/bird_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    },
+    {
+      "id" : 3,
+      "title": "Vegetables",
+      "images": [
+        {
+          "url": "file:///android_asset/bird/bird_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    },
+    {
+      "id" : 4,
+      "title": "Fruits",
+      "images": [
+        {
+          "url": "file:///android_asset/bird/bird_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    },
+    {
+      "id" : 5,
+      "title": "Vehicles",
+      "images": [
+        {
+          "url": "file:///android_asset/bird/bird_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    },
+    {
+      "id" : 6,
+      "title": "Shapes",
+      "images": [
+        {
+          "url": "file:///android_asset/bird/bird_1.png",
+          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        }
+      ]
+    },
+    {
+      "id" : 7,
+      "title": "Numbers",
       "images": [
         {
           "url": "file:///android_asset/bird/bird_1.png",
@@ -46,5 +98,6 @@
         }
       ]
     }
+
   ]
 }

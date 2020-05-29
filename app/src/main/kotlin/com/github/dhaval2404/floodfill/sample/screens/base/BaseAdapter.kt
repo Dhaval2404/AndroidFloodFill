@@ -1,5 +1,6 @@
 package com.github.dhaval2404.floodfill.sample.screens.base
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -35,8 +36,11 @@ abstract class BaseAdapter<T, VDB : ViewDataBinding, VH : RecyclerView.ViewHolde
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val viewDataBinding: VDB = DataBindingUtil.inflate(parent.context.inflater, getLayout(),
-            parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val viewDataBinding: VDB = DataBindingUtil.inflate(
+            inflater, getLayout(),
+            parent, false
+        )
         return getViewHolder(viewDataBinding, viewType)
     }
 
@@ -45,4 +49,11 @@ abstract class BaseAdapter<T, VDB : ViewDataBinding, VH : RecyclerView.ViewHolde
         itemList.addAll(list)
         notifyItemRangeChanged(0, list.size)
     }
+
+    fun notifyItemChanged(vararg indexes:  Int) {
+        indexes.forEach {
+            notifyItemChanged(it)
+        }
+    }
+
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="color"
-            type="com.github.dhaval2404.floodfill.sample.model.AppColor" />
+            type="com.github.dhaval2404.floodfill.sample.data.model.AppColor" />
 
         <variable
             name="isChecked"

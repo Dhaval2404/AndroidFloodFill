@@ -2,8 +2,8 @@ package com.github.dhaval2404.floodfill.sample.screens.image_picker
 
 import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.floodfill.sample.R
+import com.github.dhaval2404.floodfill.sample.data.entity.Image
 import com.github.dhaval2404.floodfill.sample.databinding.AdapterImagePickerBinding
-import com.github.dhaval2404.floodfill.sample.model.Image
 import com.github.dhaval2404.floodfill.sample.screens.base.BaseAdapter
 
 /**
@@ -11,9 +11,14 @@ import com.github.dhaval2404.floodfill.sample.screens.base.BaseAdapter
  * @version 1.0
  * @since 12 Dec 2019
  */
-class ImagePickerAdapter(private val viewModel: ImagePickerViewModel) :
-    BaseAdapter<Image, AdapterImagePickerBinding,
-            ImagePickerAdapter.AlbumPickerViewHolder>() {
+class ImagePickerAdapter : BaseAdapter<Image, AdapterImagePickerBinding,
+        ImagePickerAdapter.AlbumPickerViewHolder>() {
+
+    private var mImageClickListener: ((Image) -> Unit)? = null
+
+    fun setImageClickListener(listener: ((Image) -> Unit)) {
+        mImageClickListener = listener
+    }
 
     override fun getLayout() = R.layout.adapter_image_picker
 
@@ -30,7 +35,7 @@ class ImagePickerAdapter(private val viewModel: ImagePickerViewModel) :
 
         init {
             binding.imageLyt.setOnClickListener {
-                viewModel.onImagePick(it.tag as Image)
+                mImageClickListener?.invoke(it.tag as Image)
             }
         }
 

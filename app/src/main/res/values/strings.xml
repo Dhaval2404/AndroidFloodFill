@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">FloodFill</string>
+    <string name="app_name">Coloring Book</string>
+
+    <string name="title_empty_canvas">Empty Canvas?</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">no</string>
+
 </resources>

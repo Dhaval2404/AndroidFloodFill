@@ -1,6 +1,7 @@
 package com.github.dhaval2404.floodfill.sample.screens.color_palette
 
-import android.graphics.Color
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.floodfill.sample.R
 import com.github.dhaval2404.floodfill.sample.databinding.AdapterColorShadeBinding
@@ -14,12 +15,8 @@ import com.github.dhaval2404.floodfill.sample.screens.base.BaseAdapter
 class ColorShadeAdapter : BaseAdapter<Int, AdapterColorShadeBinding,
         ColorShadeAdapter.ColorPaletteViewHolder>() {
 
-    private var mShade: Int = Color.parseColor("#5c6bc0")
-    private var mColorShadeListener: ((Int)->Unit)? = null
-
-    fun setColorShadeListener(listener: (Int)->Unit){
-        this.mColorShadeListener = listener
-    }
+    private var _colorShadeLiveData = MutableLiveData<Int>()
+    val colorShadeLiveData: LiveData<Int> = _colorShadeLiveData
 
     override fun getLayout() = R.layout.adapter_color_shade
 
@@ -29,7 +26,12 @@ class ColorShadeAdapter : BaseAdapter<Int, AdapterColorShadeBinding,
     override fun onBindViewHolder(holder: ColorPaletteViewHolder, position: Int) {
         val shade = getItem(position)
         holder.binding.shade = shade
-        holder.binding.isChecked = mShade == shade
+        holder.binding.isChecked = _colorShadeLiveData.value == shade
+    }
+
+    fun setDefaultShade(color: Int) {
+        _colorShadeLiveData.value = color
+        notifyDataSetChanged()
     }
 
     inner class ColorPaletteViewHolder(val binding: AdapterColorShadeBinding) :
@@ -39,14 +41,11 @@ class ColorShadeAdapter : BaseAdapter<Int, AdapterColorShadeBinding,
                 val shade = it.tag as Int
 
                 val newIndex = itemList.indexOf(shade)
-                val oldIndex = itemList.indexOf(mShade)
+                val oldIndex = itemList.indexOf(_colorShadeLiveData.value)
 
-                mShade = shade
+                _colorShadeLiveData.value = shade
 
-                notifyItemChanged(newIndex)
-                notifyItemChanged(oldIndex)
-
-                mColorShadeListener?.invoke(shade)
+                notifyItemChanged(newIndex, oldIndex)
             }
         }
     }

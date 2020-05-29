@@ -12,4 +12,5 @@ import android.content.Intent
 interface ImagePickerNavigator {
 
     fun startActivity(intent: Intent)
+
 }

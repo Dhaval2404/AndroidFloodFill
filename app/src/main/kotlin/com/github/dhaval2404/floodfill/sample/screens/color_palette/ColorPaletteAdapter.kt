@@ -1,9 +1,11 @@
 package com.github.dhaval2404.floodfill.sample.screens.color_palette
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.floodfill.sample.R
+import com.github.dhaval2404.floodfill.sample.data.model.AppColor
 import com.github.dhaval2404.floodfill.sample.databinding.AdapterColorPaletteBinding
-import com.github.dhaval2404.floodfill.sample.model.AppColor
 import com.github.dhaval2404.floodfill.sample.screens.base.BaseAdapter
 
 /**
@@ -14,12 +16,8 @@ import com.github.dhaval2404.floodfill.sample.screens.base.BaseAdapter
 class ColorPaletteAdapter : BaseAdapter<AppColor, AdapterColorPaletteBinding,
         ColorPaletteAdapter.ColorPaletteViewHolder>() {
 
-    private var mColor: AppColor? = null
-    private var mColorPaletteListener: ((AppColor)->Unit)? = null
-
-    fun setColorPaletteListener(listener: (AppColor)->Unit){
-        this.mColorPaletteListener = listener
-    }
+    private var _colorPaletteLiveData = MutableLiveData<AppColor>()
+    val colorPaletteLiveData: LiveData<AppColor> = _colorPaletteLiveData
 
     override fun getLayout() = R.layout.adapter_color_palette
 
@@ -29,15 +27,13 @@ class ColorPaletteAdapter : BaseAdapter<AppColor, AdapterColorPaletteBinding,
     override fun onBindViewHolder(holder: ColorPaletteViewHolder, position: Int) {
         val color = getItem(position)
         holder.binding.color = color
-        holder.binding.isChecked = mColor == color
+        holder.binding.isChecked = _colorPaletteLiveData.value?.palette == color.palette
     }
 
-    override fun refresh(list: List<AppColor>) {
-        if (list.isNotEmpty()) {
-            mColor = list.first { it.palette == "#5c6bc0" }
-            mColorPaletteListener?.invoke(mColor!!)
+    fun setDefaultPalette(palette: String) {
+        itemList.firstOrNull { it.palette == palette }?.let {
+            _colorPaletteLiveData.value = it
         }
-        super.refresh(list)
     }
 
     inner class ColorPaletteViewHolder(val binding: AdapterColorPaletteBinding) :
@@ -48,14 +44,11 @@ class ColorPaletteAdapter : BaseAdapter<AppColor, AdapterColorPaletteBinding,
                 val color = it.tag as AppColor
 
                 val newIndex = itemList.indexOf(color)
-                val oldIndex = itemList.indexOf(mColor)
+                val oldIndex = itemList.indexOf(_colorPaletteLiveData.value)
 
-                mColor = color
+                _colorPaletteLiveData.value = color
 
-                notifyItemChanged(newIndex)
-                notifyItemChanged(oldIndex)
-
-                mColorPaletteListener?.invoke(color)
+                notifyItemChanged(newIndex, oldIndex)
             }
         }
     }

@@ -1,11 +1,18 @@
 package com.github.dhaval2404.floodfill.sample
 
 import android.app.Application
-import com.github.dhaval2404.floodfill.sample.screens.drawing.DrawingViewModel
-import com.github.dhaval2404.floodfill.sample.screens.image_category.MainViewModel
+import android.content.Context
+import com.github.dhaval2404.floodfill.sample.data.AppDatabase
+import com.github.dhaval2404.floodfill.sample.data.repository.AppPrefRepository
+import com.github.dhaval2404.floodfill.sample.data.repository.AppPrefRepositoryImpl
+import com.github.dhaval2404.floodfill.sample.data.repository.ImageRepository
+import com.github.dhaval2404.floodfill.sample.data.repository.ImageRepositoryImpl
+import com.github.dhaval2404.floodfill.sample.data.shared_pref.SharedPrefManager
+import com.github.dhaval2404.floodfill.sample.screens.album_picker.AlbumPickerViewModel
+import com.github.dhaval2404.floodfill.sample.screens.drawing_view.DrawingViewModel
 import com.github.dhaval2404.floodfill.sample.screens.image_picker.ImagePickerViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -23,14 +30,34 @@ class KotlinFloodFillApp : Application() {
 
     private fun initKoin() {
         val modules = module {
-            viewModel  {
-                MainViewModel()
+            viewModel {
+                AlbumPickerViewModel()
             }
-            viewModel  {
+
+            viewModel {
                 ImagePickerViewModel()
             }
-            viewModel  {
+
+            viewModel {
                 DrawingViewModel()
+            }
+        }
+
+        val database = module {
+            single {
+                AppDatabase.getAppDatabase(get())
+            }
+            single {
+                (get() as AppDatabase).imageDAO()
+            }
+            single {
+                SharedPrefManager(get(), (get() as Context).packageName)
+            }
+            single<ImageRepository> {
+                ImageRepositoryImpl(get(), get())
+            }
+            single<AppPrefRepository> {
+                AppPrefRepositoryImpl(get())
             }
         }
 
@@ -38,7 +65,7 @@ class KotlinFloodFillApp : Application() {
             // Android context
             androidContext(this@KotlinFloodFillApp)
             // your modules
-            modules(modules)
+            modules(database + modules)
         }
     }
 

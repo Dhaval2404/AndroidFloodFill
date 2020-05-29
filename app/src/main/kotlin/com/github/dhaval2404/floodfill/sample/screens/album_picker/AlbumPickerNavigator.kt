@@ -1,15 +1,15 @@
-package com.github.dhaval2404.floodfill.sample.screens.image_category
+package com.github.dhaval2404.floodfill.sample.screens.album_picker
 
 import android.content.Intent
 
 /**
- * TODO: Add Class Header
+ * Album Picker Navigator
  *
  * @author Dhaval Patel
  * @version 1.0
  * @since 27 Dec 2019
  */
-interface MainNavigator {
+interface AlbumPickerNavigator {
 
     fun startActivity(intent: Intent)
 

@@ -1,4 +1,4 @@
-package com.github.dhaval2404.floodfill.sample.model
+package com.github.dhaval2404.floodfill.sample.data.model
 
 import android.graphics.Color
 

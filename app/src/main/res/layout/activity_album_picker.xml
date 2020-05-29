@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.github.dhaval2404.floodfill.sample.screens.album_picker.AlbumPickerViewModel" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -35,6 +39,7 @@
             android:padding="6dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
             app:spanCount="2"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_album" />
