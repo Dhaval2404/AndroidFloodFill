@@ -3,7 +3,6 @@ package com.github.dhaval2404.floodfill.sample.screens.image_picker
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.floodfill.sample.R
 import com.github.dhaval2404.floodfill.sample.data.model.Album
 import com.github.dhaval2404.floodfill.sample.screens.base.BaseActivity

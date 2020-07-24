@@ -35,11 +35,11 @@
             android:id="@+id/imageCategoryRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
             android:orientation="vertical"
             android:padding="6dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            android:layoutAnimation="@anim/layout_animation_fall_down"
             app:spanCount="2"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_album" />

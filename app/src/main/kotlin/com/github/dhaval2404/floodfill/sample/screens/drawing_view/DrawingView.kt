@@ -3,11 +3,7 @@ package com.github.dhaval2404.floodfill.sample.screens.drawing_view
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
+import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
@@ -16,13 +12,9 @@ import android.view.View
 import com.github.dhaval2404.floodfill.FloodFill
 import com.github.dhaval2404.floodfill.sample.util.BitmapUtil
 import com.github.dhaval2404.floodfill.sample.util.ColorUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
 import java.util.concurrent.TimeUnit
 
 /**
