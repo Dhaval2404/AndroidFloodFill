@@ -35,6 +35,10 @@
         {
           "url": "file:///android_asset/animal/animal_8.jpg",
           "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+        },
+        {
+          "url": "file:///android_asset/animal/animal_9.jpg",
+          "copyright": "https://theclayhousesantamonica.com/wp-content/uploads/2020/05/printableing-sheets-for-boys-cool-andirls-to-print-free-pages-awesome-coloring-kids-photo-ideas-book.jpg"
         }
       ]
     },
@@ -63,8 +67,20 @@
       "title": "Fruits",
       "images": [
         {
-          "url": "file:///android_asset/bird/bird_1.png",
-          "copyright": "https://clipartart.com/categories/animal-black-and-white-clipart.html"
+          "url": "file:///android_asset/fruit/fruit_1.png",
+          "copyright": "http://www.clipartpanda.com/clipart_images/find-the-perfect-clip-art-31236659"
+        },
+        {
+          "url": "file:///android_asset/fruit/fruit_2.jpg",
+          "copyright": "https://clipartart.com/wallpaper/getimg.html"
+        },
+        {
+          "url": "file:///android_asset/fruit/fruit_3.png",
+          "copyright": "https://clipartart.com/images/clipart-black-and-white-pictures-of-fruits-5.png"
+        },
+        {
+          "url": "file:///android_asset/fruit/fruit_4.png",
+          "copyright": "https://www.clipartmax.com/png/middle/2-23217_clipart-simple-fruit-watermelon-fruit-clipart-black-and-white.png"
         }
       ]
     },
