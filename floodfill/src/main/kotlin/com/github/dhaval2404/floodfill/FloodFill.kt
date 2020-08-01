@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
 import android.os.Handler
-import android.util.Log
 
 /**
  * @author Dhaval Patel
@@ -68,7 +67,6 @@ class FloodFill private constructor(
          */
         fun init(){
         }
-
     }
 
     private external fun floodFill(
